@@ -5,12 +5,14 @@ require 'eventmachine'
 
 class CmdExecutor < EM::Connection
   include EM::P::LineText2
+
   attr_reader   :port
   attr_reader   :cmd_prompt
   attr_reader   :rsp_prefix
   attr_reader   :greetings
   attr_reader   :chan
   attr_accessor :chan_sid
+
   def initialize port, chan, *args
     p port, chan, args
     @port = port
