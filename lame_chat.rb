@@ -24,12 +24,15 @@ class CmdExecutor < EM::Connection
     console "Setting prompt=#{@cmd_prompt}"
     console "#{self.class} initialized"
   end
+
   def console *args
     puts "[#{port}] #{args.join(' ')}"
   end
+
   def send_line line
     send_data(line+"\n")
   end
+
   def post_init
     console "\"post_init\" for port=#{port}"
     self.chan_sid = chan.subscribe { |msg| receive_chan msg }
@@ -37,12 +40,14 @@ class CmdExecutor < EM::Connection
     send_line greetings
     send_data cmd_prompt
   end
+
   def receive_chan msg
     (chan_sid_sender, port, cmd, *args) = *msg;
     return if chan_sid_sender == chan_sid
     console "FROM CHANNEL: (#{chan_sid_sender},#{port}) #{cmd} #{args.join ' '}"
     send_line rsp_prefix + "#{cmd} #{args.join ' '}"
   end
+
   def receive_line line
     (cmd, *args) = line.split(' ')
     cmd = cmd.downcase
@@ -64,11 +69,14 @@ class CmdExecutor < EM::Connection
       send_data cmd_prompt
     end #case data
   end #end def recieve_data
+
   def unbind
     console "connection closed"
     chan.unsubscribe(chan_sid)
   end
+
   #private
+
 end
 
 
